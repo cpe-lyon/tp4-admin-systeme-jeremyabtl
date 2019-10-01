@@ -162,7 +162,56 @@ Cela ne marche pas car lorsque l'on fait **id u3** on peut voir que l'utilisateu
 - il faut changer de mot de passe avant 90 jours 
 >sudo chage -M 90 u4
 - il faut attendre 5 jours pour modifier un mot de passe 
+>sudo chage -m 5 u4
 - l’utilisateur est averti 14 jours avant l’expiration de son mot de passe 
+>sudo chage -W 14 u4
 - le compte sera bloqué 30 jours après expiration du mot de passe
+>sudo chage -I 30 u4
+
+Voici le résultat :
+<pre>
+20:37-abitbol@serveur:~$ sudo chage -l u4
+
+Last password change                                    : sept. 30, 2019
+Password expires                                        : déc. 29, 2019
+Password inactive                                       : janv. 28, 2020
+Account expires                                         : juin 01, 2020
+Minimum number of days between password change          : 5
+Maximum number of days between password change          : 90
+Number of days of warning before password expires       : 14
+</pre>
+
+### *Quel est l’interpréteur de commandes (Shell) de l’utilisateur root?*
+
+Il faut exécuter la commande suivante :
+>getent passwd root
+
+On obtient ce résultat : **root:x:0:0:root:/root:/bin/bash**
+
+### *A quoi correspond l’utilisateur nobody ?*
+
+L'utilisateur nobody est un "non-privileged user". Comme le non l'indique il n'a aucun droit ( si on regardes dans /etc/shadow il n'y a pas de mot de passe), mais néanmoins il joue un grand rôle pour le lancement de certains service.
+
+### *Par défaut, combien de temps la commande sudo conserve-t-elle votre mot de passe en mémoire?*
+
+Après avoir exécuté la commande sudo la première fois, le mot de passe durera 15 minutes par défaut, vous n’avez donc pas besoin de saisir un mot de passe pour chaque commande sudo.
+
+### *Quelle commande permet de forcer sudo à oublier votre mot de passe?*
+
+En faisant la commande : **man sudo** on a accès au manuel concernant sudo et on peut voir ceci :
+<pre>
+ -K, --remove-timestamp
+                 Similar to the -k option, except that it removes the user's cached credentials entirely and may not
+                 be used in conjunction with a command or other option.  This option does not require a password.
+                 Not all security policies support credential caching.
+        
+</pre>
+
+Il faut donc exécuter la commande suivante pour forcer sudo à oublier notre mot de passe :
+>sudo -K
+
+## Exercice 2. Gestion des permissions 
+
+### *Dans votre $HOME, créez un dossier test, et dans ce dossier un fichier fichier contenant quelques lignes de texte. Quels sont les droits sur test et fichier?*
 
 
